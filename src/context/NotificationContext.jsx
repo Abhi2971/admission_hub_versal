@@ -16,6 +16,7 @@ export const NotificationProvider = ({ children }) => {
   const { user, isAuthenticated } = useAuth();
   const socketRef = React.useRef(null);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (!isAuthenticated || !user) return;
 
@@ -60,7 +61,7 @@ export const NotificationProvider = ({ children }) => {
 
     return () => {
       if (socketRef.current) {
-        socket.disconnect();
+        socketRef.current.disconnect();
       }
     };
   }, [isAuthenticated, user]);

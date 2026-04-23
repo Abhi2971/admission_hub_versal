@@ -10,7 +10,7 @@ const StudentUniversities = () => {
   const [total, setTotal] = useState(0);
   const [perPage] = useState(12);
 
-  const API_URL = import.meta.env.VITE_API_URL || 'https://admission-hub-render.onrender.com';
+  const API_URL = process.env.REACT_APP_API_URL || 'https://admission-hub-render.onrender.com';
 
   const fetchUniversities = useCallback(async () => {
     try {

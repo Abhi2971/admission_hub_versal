@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Loader from '../components/common/Loader';
 import Alert from '../components/common/Alert';
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://admission-hub-render.onrender.com';
+const API_URL = process.env.REACT_APP_API_URL || 'https://admission-hub-render.onrender.com';
 
 const Notifications = () => {
   const navigate = useNavigate();

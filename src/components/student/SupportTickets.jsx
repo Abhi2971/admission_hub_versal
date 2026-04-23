@@ -14,7 +14,7 @@ const StudentSupportTickets = () => {
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [filter, setFilter] = useState('all');
 
-  const API_URL = import.meta.env.VITE_API_URL || 'https://admission-hub-render.onrender.com';
+  const API_URL = process.env.REACT_APP_API_URL || 'https://admission-hub-render.onrender.com';
 
   const fetchTickets = useCallback(async () => {
     try {

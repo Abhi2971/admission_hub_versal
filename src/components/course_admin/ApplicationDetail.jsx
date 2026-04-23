@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { getCourseAdminApplication } from '../../services/courseAdmin';
 import Alert from '../common/Alert';
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://admission-hub-render.onrender.com';
+const API_URL = process.env.REACT_APP_API_URL || 'https://admission-hub-render.onrender.com';
 
 const CourseAdminApplicationDetail = () => {
   const { appId } = useParams();

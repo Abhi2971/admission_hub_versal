@@ -597,6 +597,8 @@ const StudentSupportTickets = () => {
                 <label style={styles.label}>Subject</label>
                 <input
                   type="text"
+                  name="subject"
+                  id="subject"
                   style={styles.input}
                   placeholder="Brief summary of your issue"
                   value={newTicket.subject}

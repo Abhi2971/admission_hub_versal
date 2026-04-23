@@ -494,6 +494,8 @@ const AIAgent = () => {
           <input
             ref={inputRef}
             type="text"
+            name="message"
+            id="message"
             value={input}
             onChange={e => setInput(e.target.value)}
             placeholder="Ask about colleges, courses, admissions..."

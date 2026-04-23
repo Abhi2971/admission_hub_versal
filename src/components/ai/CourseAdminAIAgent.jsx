@@ -287,6 +287,8 @@ const CourseAdminAIAgent = () => {
             <div style={styles.inputArea}>
               <input
                 type="text"
+                name="message"
+                id="message"
                 value={input}
                 onChange={e => setInput(e.target.value)}
                 placeholder="Ask about your department, courses, applications..."

@@ -104,7 +104,7 @@ const S = {
 };
 
 /* ─── Focus-aware input ───────────────────────────────────────────────────── */
-const Field = ({ id, label, type = 'text', value, onChange, required, placeholder }) => {
+const Field = ({ id, label, type = 'text', value, onChange, required, placeholder, autoComplete }) => {
   const [focused, setFocused] = useState(false);
   return (
     <div style={S.fieldGroup}>
@@ -117,6 +117,7 @@ const Field = ({ id, label, type = 'text', value, onChange, required, placeholde
         onChange={onChange}
         required={required}
         placeholder={placeholder}
+        autoComplete={autoComplete}
         style={{ ...S.input, borderColor: focused ? '#185FA5' : '#d1d5db' }}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
@@ -190,6 +191,7 @@ const Login = () => {
               onChange={handleChange}
               required
               placeholder="you@example.com"
+              autoComplete="email"
             />
             <Field
               id="password"
@@ -199,6 +201,7 @@ const Login = () => {
               onChange={handleChange}
               required
               placeholder="Enter your password"
+              autoComplete="current-password"
             />
 
             <Link to="/forgot-password" style={S.forgotLink}>

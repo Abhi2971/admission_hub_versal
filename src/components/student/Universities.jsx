@@ -240,6 +240,8 @@ const StudentUniversities = () => {
       <form style={S.searchBar} onSubmit={handleSearch}>
         <input
           type="text"
+          name="search"
+          id="search"
           style={S.searchInput}
           placeholder="Search universities by name or code..."
           value={search}

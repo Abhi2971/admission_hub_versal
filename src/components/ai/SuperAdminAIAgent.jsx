@@ -282,6 +282,8 @@ const SuperAdminAIAgent = () => {
             <div style={styles.inputArea}>
               <input
                 type="text"
+                name="message"
+                id="message"
                 value={input}
                 onChange={e => setInput(e.target.value)}
                 placeholder="Ask about platform analytics, revenue, colleges..."

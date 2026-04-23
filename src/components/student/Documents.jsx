@@ -293,6 +293,8 @@ const StudentDocuments = () => {
                     <label style={styles.formLabel}>Select File</label>
                     <input
                       type="file"
+                      name="document"
+                      id="document"
                       onChange={handleFileChange}
                       accept=".pdf,.jpg,.jpeg,.png"
                       style={styles.formFile}

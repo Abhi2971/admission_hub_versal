@@ -39,6 +39,7 @@ const AdminDashboard = ({ tab = 'overview' }) => {
       }
     } catch (err) {
       console.error('Error fetching notifications:', err);
+      setNotifications([]);
     }
   }, []);
 
@@ -52,11 +53,11 @@ const AdminDashboard = ({ tab = 'overview' }) => {
         getCollegeCourses(),
       ]);
       
-      setMyCollege(collegeRes.data);
-      setApplications(Array.isArray(appsRes.data.applications) ? appsRes.data.applications : []);
+      setMyCollege(collegeRes.data || collegeRes.data?.college || null);
+      setApplications(Array.isArray(appsRes.data?.applications) ? appsRes.data.applications : []);
       setCourses(Array.isArray(coursesRes.data) ? coursesRes.data : []);
       
-      const apps = Array.isArray(appsRes.data.applications) ? appsRes.data.applications : [];
+      const apps = Array.isArray(appsRes.data?.applications) ? appsRes.data.applications : [];
       const statusCounts = {
         applied: apps.filter(a => a.status === 'applied').length,
         shortlisted: apps.filter(a => a.status === 'shortlisted').length,
@@ -72,8 +73,11 @@ const AdminDashboard = ({ tab = 'overview' }) => {
         conversionRate: apps.length > 0 ? Math.round(((statusCounts.offered + statusCounts.confirmed) / apps.length) * 100) : 0
       });
     } catch (err) {
-      setError('Failed to load dashboard data. Please refresh the page.');
       console.error('Dashboard error:', err);
+      setMyCollege(null);
+      setApplications([]);
+      setCourses([]);
+      setStats({ total: 0, applied: 0, shortlisted: 0, offered: 0, confirmed: 0, rejected: 0, pendingRate: 0, conversionRate: 0 });
     } finally {
       setLoading(false);
     }

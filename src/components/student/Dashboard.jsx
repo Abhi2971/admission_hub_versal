@@ -33,6 +33,7 @@ const StudentDashboard = () => {
       }
     } catch (err) {
       console.error('Error fetching notifications:', err);
+      setNotifications([]);
     }
   }, []);
 
@@ -46,10 +47,10 @@ const StudentDashboard = () => {
         getCreditBalance(),
         getCourses({ per_page: 6 })
       ]);
-      setProfile(profileRes.data);
+      setProfile(profileRes.data || null);
       setApplications(Array.isArray(appsRes.data) ? appsRes.data : []);
-      setCredits(creditRes.data.balance);
-      setFeaturedCourses(coursesRes.data.courses || []);
+      setCredits(creditRes.data?.balance || 0);
+      setFeaturedCourses(coursesRes.data?.courses || []);
       
       const apps = Array.isArray(appsRes.data) ? appsRes.data : [];
       const statusCounts = {
@@ -67,15 +68,26 @@ const StudentDashboard = () => {
       });
 
       setMilestones([
-        { id: 1, title: 'Complete Profile', done: !!profileRes.data.name, icon: '👤' },
+        { id: 1, title: 'Complete Profile', done: !!profileRes.data?.name, icon: '👤' },
         { id: 2, title: 'Browse Courses', done: true, icon: '📚' },
         { id: 3, title: 'Submit Applications', done: apps.length > 0, icon: '📝' },
         { id: 4, title: 'Upload Documents', done: apps.some(a => a.documents?.length > 0), icon: '📄' },
         { id: 5, title: 'Confirm Admission', done: statusCounts.confirmed > 0, icon: '🎓' },
       ]);
     } catch (err) {
-      setError('Failed to load dashboard data. Please refresh the page.');
       console.error('Dashboard error:', err);
+      setProfile(null);
+      setApplications([]);
+      setCredits(0);
+      setFeaturedCourses([]);
+      setStats({ total: 0, applied: 0, shortlisted: 0, offered: 0, confirmed: 0, rejected: 0, offerRate: 0 });
+      setMilestones([
+        { id: 1, title: 'Complete Profile', done: false, icon: '👤' },
+        { id: 2, title: 'Browse Courses', done: true, icon: '📚' },
+        { id: 3, title: 'Submit Applications', done: false, icon: '📝' },
+        { id: 4, title: 'Upload Documents', done: false, icon: '📄' },
+        { id: 5, title: 'Confirm Admission', done: false, icon: '🎓' },
+      ]);
     } finally {
       setLoading(false);
     }

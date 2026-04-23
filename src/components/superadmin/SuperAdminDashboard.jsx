@@ -44,10 +44,18 @@ const SuperAdminDashboard = ({ tab: initialTab }) => {
         fetch(`${API_URL}/api/support/admin/tickets`, { headers })
       ]);
 
-      const [uniData, colData, stuData, adminsData, uniPlansData, colPlansData, stuPlansData, ticketsData] = await Promise.all([
-        uniRes.json(), colRes.json(), stuRes.json(), adminsRes.json(),
-        uniPlansRes.json(), colPlansRes.json(), stuPlansRes.json(), ticketsRes.json()
+      const responses = await Promise.all([
+        uniRes.ok ? uniRes.json() : { universities: [] },
+        colRes.ok ? colRes.json() : { colleges: [] },
+        stuRes.ok ? stuRes.json() : { students: [] },
+        adminsRes.ok ? adminsRes.json() : [],
+        uniPlansRes.ok ? uniPlansRes.json() : { plans: [] },
+        colPlansRes.ok ? colPlansRes.json() : [],
+        stuPlansRes.ok ? stuPlansRes.json() : [],
+        ticketsRes.ok ? ticketsRes.json() : { tickets: [], open: 0 }
       ]);
+
+      const [uniData, colData, stuData, adminsData, uniPlansData, colPlansData, stuPlansData, ticketsData] = responses;
 
       const admins = Array.isArray(adminsData) ? adminsData : [];
       const universityAdmins = admins.filter(a => a.role === 'university_admin');

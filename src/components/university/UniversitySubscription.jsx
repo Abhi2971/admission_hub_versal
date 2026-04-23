@@ -5,7 +5,7 @@ const UniversitySubscription = () => {
   const [loading, setLoading] = useState(true);
   const [plans, setPlans] = useState([]);
 
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+  const API_URL = import.meta.env.VITE_API_URL || 'https://admission-hub-render.onrender.com';
 
   const fetchSubscription = useCallback(async () => {
     try {

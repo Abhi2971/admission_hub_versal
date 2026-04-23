@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { getCourseAdminCourses } from '../../services/courseAdmin';
 import Alert from '../common/Alert';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_URL = import.meta.env.VITE_API_URL || 'https://admission-hub-render.onrender.com';
 
 const ManualEntry = () => {
   const [loading, setLoading] = useState(false);

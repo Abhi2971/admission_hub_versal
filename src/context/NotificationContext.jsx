@@ -12,20 +12,33 @@ export const NotificationProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [socketConnected, setSocketConnected] = useState(false);
   const { user, isAuthenticated } = useAuth();
 
   useEffect(() => {
     if (!isAuthenticated || !user) return;
 
     const token = localStorage.getItem('access_token');
-    const newSocket = io(API_URL.replace('/api', ''), {
-      transports: ['websocket'],
+    const socketUrl = API_URL.replace('/api', '');
+    
+    const newSocket = io(socketUrl, {
+      transports: ['websocket', 'polling'],
+      timeout: 10000,
+      reconnection: true,
+      reconnectionAttempts: 3,
+      reconnectionDelay: 1000,
       query: { token }
     });
 
     newSocket.on('connect', () => {
       console.log('Socket connected');
+      setSocketConnected(true);
       newSocket.emit('authenticate', { token });
+    });
+
+    newSocket.on('connect_error', (error) => {
+      console.error('Socket connection error:', error);
+      setSocketConnected(false);
     });
 
     newSocket.on('authenticated', (data) => {
@@ -46,20 +59,29 @@ export const NotificationProvider = ({ children }) => {
     };
   }, [isAuthenticated, user]);
 
-  const markAsRead = (id) => {
-    fetch(`${API_URL}/notifications/${id}/read`, {
-      method: 'PUT',
-      headers: { Authorization: `Bearer ${localStorage.getItem('access_token')}` }
-    }).then(() => {
-      setNotifications(prev =>
-        prev.map(n => (n._id === id ? { ...n, read: true } : n))
-      );
-      setUnreadCount(prev => Math.max(0, prev - 1));
-    });
+  const markAsRead = async (id) => {
+    try {
+      const response = await fetch(`${API_URL}/api/notifications/${id}/read`, {
+        method: 'PUT',
+        headers: { 
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      if (response.ok) {
+        setNotifications(prev =>
+          prev.map(n => (n._id === id ? { ...n, read: true } : n))
+        );
+        setUnreadCount(prev => Math.max(0, prev - 1));
+      }
+    } catch (err) {
+      console.error('Error marking notification as read:', err);
+    }
   };
 
   const value = {
     socket,
+    socketConnected,
     notifications,
     unreadCount,
     markAsRead,

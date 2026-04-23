@@ -21,41 +21,45 @@ export const NotificationProvider = ({ children }) => {
     const token = localStorage.getItem('access_token');
     const socketUrl = API_URL.replace('/api', '');
     
-    const newSocket = io(socketUrl, {
-      transports: ['websocket', 'polling'],
-      timeout: 10000,
-      reconnection: true,
-      reconnectionAttempts: 3,
-      reconnectionDelay: 1000,
-      query: { token }
-    });
+    try {
+      const newSocket = io(socketUrl, {
+        transports: ['polling', 'websocket'],
+        timeout: 5000,
+        reconnection: false,
+        autoConnect: true
+      });
 
-    newSocket.on('connect', () => {
-      console.log('Socket connected');
-      setSocketConnected(true);
-      newSocket.emit('authenticate', { token });
-    });
+      newSocket.on('connect', () => {
+        console.log('Socket connected');
+        setSocketConnected(true);
+        newSocket.emit('authenticate', { token });
+      });
 
-    newSocket.on('connect_error', (error) => {
-      console.error('Socket connection error:', error);
-      setSocketConnected(false);
-    });
+      newSocket.on('connect_error', (error) => {
+        console.log('Socket connection failed - continuing without real-time notifications');
+        setSocketConnected(false);
+      });
 
-    newSocket.on('authenticated', (data) => {
-      if (data.status === 'success') {
-        console.log('Socket authenticated');
-      }
-    });
+      newSocket.on('authenticated', (data) => {
+        if (data.status === 'success') {
+          console.log('Socket authenticated');
+        }
+      });
 
-    newSocket.on('notification', (notif) => {
-      setNotifications(prev => [notif, ...prev]);
-      setUnreadCount(prev => prev + 1);
-    });
+      newSocket.on('disconnect', () => {
+        console.log('Socket disconnected');
+        setSocketConnected(false);
+      });
 
-    setSocket(newSocket);
+      setSocket(newSocket);
+    } catch (error) {
+      console.log('Socket initialization failed - continuing without real-time notifications');
+    }
 
     return () => {
-      newSocket.disconnect();
+      if (socket) {
+        socket.disconnect();
+      }
     };
   }, [isAuthenticated, user]);
 

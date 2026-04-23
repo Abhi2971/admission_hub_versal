@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 
 /* ─── Keyframe injection ──────────────────────────────────────────────────── */
@@ -163,12 +163,6 @@ const ArrowRight = () => (
 const CheckIcon = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
     <path d="M20 6L9 17l-5-5" />
-  </svg>
-);
-const StepsIcon = ({ num }) => (
-  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="12" cy="12" r="10" />
-    <path d="M12 8v4l2 2" />
   </svg>
 );
 const UserIcon = () => (

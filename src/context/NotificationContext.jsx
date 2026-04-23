@@ -14,6 +14,7 @@ export const NotificationProvider = ({ children }) => {
   const [unreadCount, setUnreadCount] = useState(0);
   const [socketConnected, setSocketConnected] = useState(false);
   const { user, isAuthenticated } = useAuth();
+  const socketRef = React.useRef(null);
 
   useEffect(() => {
     if (!isAuthenticated || !user) return;
@@ -51,13 +52,14 @@ export const NotificationProvider = ({ children }) => {
         setSocketConnected(false);
       });
 
+      socketRef.current = newSocket;
       setSocket(newSocket);
     } catch (error) {
       console.log('Socket initialization failed - continuing without real-time notifications');
     }
 
     return () => {
-      if (socket) {
+      if (socketRef.current) {
         socket.disconnect();
       }
     };

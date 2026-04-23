@@ -64,7 +64,7 @@ export const NotificationProvider = ({ children }) => {
         socketRef.current.disconnect();
       }
     };
-  }, [isAuthenticated, user]);
+  }, [isAuthenticated, user]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const markAsRead = async (id) => {
     try {
